@@ -1,9 +1,24 @@
+import java.io.File;
+import java.io.IOException;
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
+
 // import java.time.Duration;
 
-public class Song {
-  public int trackNo;
-  
-  public String song;
+public abstract class Song {
+  private int trackNo;
+  private String song;
+  // public int songDuration; 
+  private String songPath;
+  private AudioInputStream songStream;
+  private Clip songClip;
+
+  String status;
+  Long currentFrame;
 
   // private String songDuration; 
   // private String[] strValues;
@@ -11,29 +26,25 @@ public class Song {
   // durVer = durVer.plusSeconds(Integer.parseInt(strValues[1]));
   // FIX THIS WEIRD SEMICOLON BUG
 
-  public int songDuration; 
-
-  public int songClip; 
-
-  public Song (int num, String name, int time, int file) {
-    trackNo = num;
-    song = name;
-    songDuration = time; 
-    // songClip = uploadAudio(this.filePath);
-  }
-
+  public void setTrackNo(int num) {trackNo = num;}
   public int getTrackNo() {return trackNo;}
+
   public void setSong(String name) {song = name;}
   public String getSong() {return song;}
-  public int getSongDuration() {return songDuration;};
-  public int getSongClip() {return songClip;}
-  
-  
-  // acquire the sound audio
-  // RESUME HERE!!!
 
-  class sound {
+  // public int getSongDuration() {return songDuration;};
 
+  public void setSongPath(String path) {songPath = path;}
+  public String getSongPath() {return songPath;}
+  
+  public void setSongStream() throws UnsupportedAudioFileException, IOException {
+      songStream = AudioSystem.getAudioInputStream(new File(songPath).getAbsoluteFile()); 
   }
+  public AudioInputStream getSongStream() {return songStream;}
+
+  public void setSongClip() throws LineUnavailableException {
+    songClip = AudioSystem.getClip();
+  }
+  public Clip getSongClip() {return songClip;}
   
 }

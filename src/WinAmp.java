@@ -1,3 +1,6 @@
+// add key events to the control buttons 
+
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,9 +13,14 @@ import javax.swing.table.*;
 public class WinAmp extends JFrame {
   private static WinAmp firstInstance = null;
 
+  Song firstSong = new stranger();
+  Song secondSong = new stillSane();
+  Song thirdSong = new team();
+  Song fourthSong = new gottaGetAway();
+  Song fifthSong = new adults();
+
   JPanel northPanel, mainPanel;
 
-  
   JPanel titlePanel, controlPanel, counterPanel, playGrp;
   JLabel title; 
   JTextArea currentTrack;
@@ -23,17 +31,9 @@ public class WinAmp extends JFrame {
   JPanel listTitlePanel, songListPanel;
   JTable songList;
   JLabel playlist;
-  
-  Song firstSong = new Song(1, "The Stranger - Billy Joel", 0, 0);
-  Song secondSong = new Song(2, "Still Sane - Lorde", 0, 0);
-  Song thirdSong = new Song(3, "Team - Lorde", 0, 0); 
-  Song fourthSong = new Song(4, "Gotta Get Away - Vista Kicks", 0, 0);
-  Song fifthSong = new Song(5, "The Adults are Talking - The Strokes", 0, 0); 
 
   public WinAmp() {
-    
     // =========================================== NORTH PANEL ===========================================
-    
     northPanel = new JPanel(new BorderLayout());
     // northPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
 
@@ -141,8 +141,6 @@ public class WinAmp extends JFrame {
 
     listTitlePanel.add(playlist);
 
-    
-    
     songListPanel = new JPanel(new BorderLayout());
     songList = new JTable(new songListTable());
     songList.setBackground(Color.BLACK);
@@ -200,6 +198,18 @@ public class WinAmp extends JFrame {
   
     public Object getValueAt(int row, int col) {return songs[row][col];}
   }
+
+  // public void play() {
+  //   songClip.start();
+  //   System.out.println("playing");
+  // }
+  // public void pause() {
+  //   if(status.equals("paused")) {
+  //     System.out.println("audio is already paused");
+  //     return;
+  //   } 
+
+  // }
 
   public static void main(String[] args) {
     WinAmp.runMusicApp(); 
