@@ -1,21 +1,39 @@
-import java.time.Duration;
+// import java.time.Duration;
 
 public class Song {
-  private int trackNo;
+  public int trackNo;
   
-  private String song;
+  public String song;
 
-  private String songDuration; 
-  private String[] strValues;
-  private Duration durVer = Duration.ofMinutes(Integer.parseInt(strValues[0]));
-  durVer = durVer.plusSeconds(Integer.parseInt(strValues[1]));
+  // private String songDuration; 
+  // private String[] strValues;
+  // private Duration durVer = Duration.ofMinutes(Integer.parseInt(strValues[0]));
+  // durVer = durVer.plusSeconds(Integer.parseInt(strValues[1]));
+  // FIX THIS WEIRD SEMICOLON BUG
 
-  // private sound AudioFile; 
+  public int songDuration; 
 
-  public int getTrackNo() {return trackNo;};
-  public String getSong() {return song;};
-  public String getSongDuration() {return songDuration;};
+  public int songClip; 
+
+  public Song (int num, String name, int time, int file) {
+    trackNo = num;
+    song = name;
+    songDuration = time; 
+    // songClip = uploadAudio(this.filePath);
+  }
+
+  public int getTrackNo() {return trackNo;}
+  public void setSong(String name) {song = name;}
+  public String getSong() {return song;}
+  public int getSongDuration() {return songDuration;};
+  public int getSongClip() {return songClip;}
+  
   
   // acquire the sound audio
+  // RESUME HERE!!!
 
+  class sound {
+
+  }
+  
 }

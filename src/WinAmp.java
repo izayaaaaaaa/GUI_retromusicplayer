@@ -3,46 +3,90 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.*;
+// import javax.swing.border.*;
 import javax.swing.plaf.DimensionUIResource;
+import javax.swing.table.*;
 
 public class WinAmp extends JFrame {
   private static WinAmp firstInstance = null;
 
   JPanel northPanel, mainPanel;
 
-  JPanel counterPanel, playGrp;
+  
+  JPanel titlePanel, controlPanel, counterPanel, playGrp;
+  JLabel title; 
   JTextArea currentTrack;
   String playNpausePath;
   JButton previousBtn, nextBtn; 
   JToggleButton playPauseBtn;
 
+  JPanel listTitlePanel, songListPanel;
+  JTable songList;
+  JLabel playlist;
+  
+  Song firstSong = new Song(1, "The Stranger - Billy Joel", 0, 0);
+  Song secondSong = new Song(2, "Still Sane - Lorde", 0, 0);
+  Song thirdSong = new Song(3, "Team - Lorde", 0, 0); 
+  Song fourthSong = new Song(4, "Gotta Get Away - Vista Kicks", 0, 0);
+  Song fifthSong = new Song(5, "The Adults are Talking - The Strokes", 0, 0); 
+
   public WinAmp() {
     
     // =========================================== NORTH PANEL ===========================================
-    northPanel = new JPanel(new GridBagLayout());
+    
+    northPanel = new JPanel(new BorderLayout());
+    // northPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
+
+    // Border lineBorder = BorderFactory.createLineBorder(new Color(102, 101, 117));
+    // Border emptyBorder = BorderFactory.createEmptyBorder(0, 0, 5, 5);
+    // Border compoundBorder = BorderFactory.createCompoundBorder(lineBorder, emptyBorder); 
+    // northPanel.setBorder(compoundBorder);
+
+    titlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+    titlePanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
+    titlePanel.setBackground(new Color(45, 47, 72));
+    title = new JLabel("WINAMP");
+    title.setFont(new Font("Verdana", 1, 13));
+    title.setForeground(Color.white);
+    titlePanel.add(title);
+
+    controlPanel = new JPanel(new GridBagLayout());
+    // controlPanel.setBorder(BorderFactory.createRaisedBevelBorder());
+    controlPanel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 20));
+    // controlPanel.setBackground(new Color(45, 47, 72));
+
     GridBagConstraints c = new GridBagConstraints();
 
     counterPanel = new JPanel();
-    counterPanel.setPreferredSize(new Dimension(150, 100));
-    counterPanel.setBackground(Color.green);
+    controlPanel.setBackground(new Color(45, 47, 72));
+    counterPanel.setPreferredSize(new Dimension(275, 125));
+    counterPanel.setBackground(Color.black);
     c.gridx = 0;
     c.gridy = 1;
     c.gridheight = 2; 
-    northPanel.add(counterPanel, c);
+    controlPanel.add(counterPanel, c);
 
-    currentTrack = new JTextArea("Test String", 0, 20);
+    currentTrack = new JTextArea("Test String", 0, 25);
+    currentTrack.setBorder(BorderFactory.createLoweredBevelBorder());
     currentTrack.setEditable(false);
+    currentTrack.setFont(new Font("Verdana", 0, 16));
+    currentTrack.setBackground(Color.black);
+    currentTrack.setForeground(Color.green);
     c.gridx = 1; 
     c.gridy = 0; 
-    northPanel.add(currentTrack, c);
+    c.insets = new Insets(27, 10, 0, 0);
+    controlPanel.add(currentTrack, c);
 
-    playGrp = new JPanel();
-    playGrp.setBackground(Color.yellow);
+    playGrp = new JPanel(new FlowLayout(FlowLayout.LEFT, 3, 2));
+    playGrp.setBorder(BorderFactory.createLoweredBevelBorder());
+    playGrp.setBackground(new Color(30, 28, 45));
     c.gridx = 1;
     c.gridy = 2;
+    c.insets = new Insets(10, 0, 0, 0);
+    c.anchor = GridBagConstraints.FIRST_LINE_END;
     
-    previousBtn = new JButton(new ImageIcon("src/icons/previous.jpg"));
-    previousBtn.setPreferredSize(new Dimension(30, 24));
+    previousBtn = new JButton(new ImageIcon("src/icons/previous2.jpg"));
+    previousBtn.setPreferredSize(new Dimension(65, 50));
     previousBtn.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         if(e.getSource() == previousBtn) {
@@ -51,19 +95,19 @@ public class WinAmp extends JFrame {
       }
     });
     
-    playPauseBtn = new JToggleButton(new ImageIcon("src/icons/play.jpg"));
-    playPauseBtn.setPreferredSize(new DimensionUIResource(31, 24));
+    playPauseBtn = new JToggleButton(new ImageIcon("src/icons/play2.jpg"));
+    playPauseBtn.setPreferredSize(new DimensionUIResource(65, 50));
     playPauseBtn.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         if(e.getSource() == playPauseBtn) {
           System.out.println("play/pause button");
-          playPauseBtn.setSelectedIcon(new ImageIcon("src/icons/pause.jpg"));
+          playPauseBtn.setSelectedIcon(new ImageIcon("src/icons/pause2.jpg"));
         }
       }
     });
 
-    nextBtn = new JButton(new ImageIcon("src/icons/next.jpg"));
-    nextBtn.setPreferredSize(new Dimension(31, 24));
+    nextBtn = new JButton(new ImageIcon("src/icons/next2.jpg"));
+    nextBtn.setPreferredSize(new Dimension(65, 50));
     nextBtn.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         if(e.getSource() == nextBtn) {
@@ -75,14 +119,49 @@ public class WinAmp extends JFrame {
     playGrp.add(previousBtn);
     playGrp.add(playPauseBtn);
     playGrp.add(nextBtn);
-    northPanel.add(playGrp, c);
+    
+    controlPanel.add(playGrp, c);
+
+    northPanel.add(titlePanel, BorderLayout.NORTH);
+    northPanel.add(controlPanel, BorderLayout.CENTER);
 
     // ============================================ MAIN PANEL ============================================
-    mainPanel = new JPanel();
+    mainPanel = new JPanel(new BorderLayout());
+    mainPanel.setBorder(BorderFactory.createEmptyBorder(0, 20, 10, 20));
+    mainPanel.setBackground(new Color(45, 47, 72));
     // titled border for the playlist title on top of the text area
-    // table with two columns and 10 rows/songs
-    
+    // highlight a row that is currently playing through a listener
 
+    listTitlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+    listTitlePanel.setBackground(new Color(45, 47, 72));
+    listTitlePanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0));
+    playlist = new JLabel("Song List");
+    playlist.setFont(new Font("Verdana", 1, 12));
+    playlist.setForeground(Color.WHITE);
+
+    listTitlePanel.add(playlist);
+
+    
+    
+    songListPanel = new JPanel(new BorderLayout());
+    songList = new JTable(new songListTable());
+    songList.setBackground(Color.BLACK);
+    songList.setForeground(Color.green);
+    songList.setShowGrid(false);
+
+    TableColumnModel columnModel = songList.getColumnModel();
+    columnModel.getColumn(0).setMaxWidth(25);
+    columnModel.getColumn(2).setMaxWidth(150);
+
+    DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
+    rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
+    songList.getColumnModel().getColumn(2).setCellRenderer(rightRenderer);
+    songList.setRowHeight(17);
+   
+    songListPanel.add(songList, BorderLayout.CENTER);
+    mainPanel.add(listTitlePanel, BorderLayout.NORTH);
+    mainPanel.add(songListPanel, BorderLayout.CENTER);
+  
     // ========================================= SETUP THE FRAME =========================================
     add(northPanel, BorderLayout.NORTH);
     add(mainPanel, BorderLayout.CENTER);
@@ -90,7 +169,7 @@ public class WinAmp extends JFrame {
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     // setSize(500, 500);
     pack();
-    // setResizable(false);
+    setResizable(false);
     setVisible(true);
   } // WinAmp constructor
 
@@ -102,6 +181,25 @@ public class WinAmp extends JFrame {
 
     return firstInstance;
   } // runMusicApp 
+
+  class songListTable extends AbstractTableModel {
+    String [] columnNames = {"Track No.", "Song", "Duration"};
+    Object[][] songs = {
+      {firstSong.getTrackNo(), firstSong.getSong(), "4:57"},
+      {secondSong.getTrackNo(), secondSong.getSong(), "4:57"},
+      {thirdSong.getTrackNo(), thirdSong.getSong(), "4:57"},
+      {fourthSong.getTrackNo(), fourthSong.getSong(), "4:57"},
+      {fifthSong.getTrackNo(), fifthSong.getSong(), "4:57"}
+    };
+  
+    public int getColumnCount() {return columnNames.length;}
+  
+    public int getRowCount() {return songs.length;}
+  
+    public String getColumnName(int col) {return columnNames[col];}
+  
+    public Object getValueAt(int row, int col) {return songs[row][col];}
+  }
 
   public static void main(String[] args) {
     WinAmp.runMusicApp(); 
