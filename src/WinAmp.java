@@ -46,34 +46,21 @@ public class WinAmp extends JFrame {
   public WinAmp() {
     // =========================================== NORTH PANEL ===========================================
     northPanel = new JPanel(new BorderLayout());
-    // northPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
-
-    // Border lineBorder = BorderFactory.createLineBorder(new Color(102, 101, 117));
-    // Border emptyBorder = BorderFactory.createEmptyBorder(0, 0, 5, 5);
-    // Border compoundBorder = BorderFactory.createCompoundBorder(lineBorder, emptyBorder); 
-    // northPanel.setBorder(compoundBorder);
 
     titlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
     titlePanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
-    titlePanel.setBackground(new Color(45, 47, 72));
+    titlePanel.setBackground(new Color(31, 32, 50));
     title = new JLabel("Izaya's Music Player");
     title.setFont(new Font("Verdana", 1, 16));
     title.setForeground(Color.white);
     titlePanel.add(title);
 
     controlPanel = new JPanel(new GridBagLayout());
-    // controlPanel.setBorder(BorderFactory.createRaisedBevelBorder());
     controlPanel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 20));
-    // controlPanel.setBackground(new Color(45, 47, 72));
-    controlPanel.setBackground(new Color(45, 47, 72));
-    
-    
+    controlPanel.setBackground(new Color(31, 32, 50));
     
     chooseSongPanel = new JPanel(new BorderLayout());
     chooseSongPanel.setBorder(new EmptyBorder(10,10, 10, 10));
-    // create label "What Song do you want to listen to?"
-    // in the text area the user will type their ans to the ques and there's a key listener listening in
-    // acquire what the user typed and play said song
     chooseSongPanel.setPreferredSize(new Dimension(275, 125));
     chooseSongPanel.setBackground(Color.black);
     
@@ -82,11 +69,11 @@ public class WinAmp extends JFrame {
     c.gridy = 1;
     c.gridheight = 2; 
 
-    userInputTitle = new JTextArea("Press Stop. Then, pick a song to play.\n(Just type in the track number.)");
+    userInputTitle = new JTextArea("Press the Stop Button.\nThen, pick a song to play.\n(Just type in the track number.)");
     userInputTitle.setBackground(Color.black);
     userInputTitle.setForeground(Color.green);
     userInputTitle.setFont(new Font("Verdana", 0, 14));
-    userinput = new JTextArea("> ");
+    userinput = new JTextArea("> ", 1,0);
     userinput.setBackground(Color.black);
     userinput.setForeground(Color.green);
     userinput.setFont(new Font("Verdana", 0, 12));
@@ -107,7 +94,6 @@ public class WinAmp extends JFrame {
     c.insets = new Insets(27, 10, 0, 0);
     controlPanel.add(currentTrack, c);
 
-    // currentSong.getSongClip().loop(Clip.LOOP_CONTINUOUSLY); 
     play(currentSong);
 
     playGrp = new JPanel(new FlowLayout(FlowLayout.LEFT, 3, 2));
@@ -201,13 +187,11 @@ public class WinAmp extends JFrame {
 
     // ============================================ MAIN PANEL ============================================
     mainPanel = new JPanel(new BorderLayout());
-    mainPanel.setBorder(BorderFactory.createEmptyBorder(0, 20, 10, 20));
-    mainPanel.setBackground(new Color(45, 47, 72));
-    // titled border for the playlist title on top of the text area
-    // highlight a row that is currently playing through a listener
+    mainPanel.setBorder(BorderFactory.createEmptyBorder(0, 20, 20, 20));
+    mainPanel.setBackground(new Color(31, 32, 50));
 
     listTitlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-    listTitlePanel.setBackground(new Color(45, 47, 72));
+    listTitlePanel.setBackground(new Color(31, 32, 50));
     listTitlePanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0));
     
     playlist = new JLabel("Song List");
@@ -217,6 +201,8 @@ public class WinAmp extends JFrame {
     listTitlePanel.add(playlist);
 
     songListPanel = new JPanel(new BorderLayout());
+    songListPanel.setBackground(Color.black);
+    songListPanel.setBorder(new EmptyBorder(5,5, 5, 5));
     songList = new JTable(new songListTable());
     songList.setBackground(Color.BLACK);
     songList.setForeground(Color.green);
@@ -242,7 +228,6 @@ public class WinAmp extends JFrame {
     add(mainPanel, BorderLayout.CENTER);
 
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    // setSize(500, 500);
     pack();
     setResizable(false);
     setVisible(true);
@@ -252,53 +237,49 @@ public class WinAmp extends JFrame {
     public void keyPressed(KeyEvent e) {
       if (e.getKeyChar() == '0') {
         currentSong = arraySongs[0];
-        System.out.println("Song is " + currentSong.getSong());
+        currentTrack.setText(currentSong.getTrackNo() + ". " + currentSong.getSong());
       } 
       else if (e.getKeyChar() == '1') {
         currentSong = arraySongs[1];
-        System.out.println("Song is " + currentSong.getSong());
+        currentTrack.setText(currentSong.getTrackNo() + ". " + currentSong.getSong());
       }
       else if (e.getKeyChar() == '2') {
         currentSong = arraySongs[2];
-        System.out.println("Song is " + currentSong.getSong());
+        currentTrack.setText(currentSong.getTrackNo() + ". " + currentSong.getSong());
       }
       else if (e.getKeyChar() == '3') {
         currentSong = arraySongs[3];
-        System.out.println("Song is " + currentSong.getSong());
+        currentTrack.setText(currentSong.getTrackNo() + ". " + currentSong.getSong());
       }
       else if (e.getKeyChar() == '4') {
         currentSong = arraySongs[4];
-        System.out.println("Song is " + currentSong.getSong());
+        currentTrack.setText(currentSong.getTrackNo() + ". " + currentSong.getSong());
       }
       else if (e.getKeyChar() == '5') {
         currentSong = arraySongs[5];
-        System.out.println("Song is " + currentSong.getSong());
+        currentTrack.setText(currentSong.getTrackNo() + ". " + currentSong.getSong());
       }
       else if (e.getKeyChar() == '6') {
         currentSong = arraySongs[6];
-        System.out.println("Song is " + currentSong.getSong());
+        currentTrack.setText(currentSong.getTrackNo() + ". " + currentSong.getSong());
       }
       else if (e.getKeyChar() == '7') {
         currentSong = arraySongs[7];
-        System.out.println("Song is " + currentSong.getSong());
+        currentTrack.setText(currentSong.getTrackNo() + ". " + currentSong.getSong());
       }
       else if (e.getKeyChar() == '8') {
         currentSong = arraySongs[8];
-        System.out.println("Song is " + currentSong.getSong());
+        currentTrack.setText(currentSong.getTrackNo() + ". " + currentSong.getSong());
       }
       else if (e.getKeyChar() == '9') {
         currentSong = arraySongs[9];
-        System.out.println("Song is " + currentSong.getSong());
-
+        currentTrack.setText(currentSong.getTrackNo() + ". " + currentSong.getSong());
       }
-
-      int code = e.getKeyCode();
-      System.out.println("keycode is " + code);
-    }
+    } 
 
     @Override public void keyTyped(KeyEvent e) {}
     @Override public void keyReleased(KeyEvent e) {}
-  }
+  } // userInputListener
 
   class songListTable extends AbstractTableModel {
     String [] columnNames = {"Track No.", "Song", "Duration"};
@@ -313,7 +294,7 @@ public class WinAmp extends JFrame {
       {eightSong.getTrackNo(), eightSong.getSong(), "3:53"},
       {ninthSong.getTrackNo(), ninthSong.getSong(), "3:59"},
       {tenthSong.getTrackNo(), tenthSong.getSong(), "4:07"}
-    };
+    }; 
   
     public int getColumnCount() {return columnNames.length;}
   
@@ -322,21 +303,17 @@ public class WinAmp extends JFrame {
     public String getColumnName(int col) {return columnNames[col];}
   
     public Object getValueAt(int row, int col) {return songs[row][col];}
-  }
+  } // songListTable class
 
   public void play(Song s) {
     s.getSongClip().start();
     status = "playing";
-    System.out.println("music is now playing");
-
   }
 
   public void pause(Song s) {
     currentFrame = s.getSongClip().getMicrosecondPosition();
     s.getSongClip().stop();
-
     status = "paused";
-    System.out.println("music is now paused");
   } 
 
   public void stop(Song s) {
@@ -347,7 +324,6 @@ public class WinAmp extends JFrame {
   public void resetAudioStream(Song s) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
 		s.setSongStream();
 		s.getSongClip().open(s.getSongStream());
-		// s.getSongClip().loop(Clip.LOOP_CONTINUOUSLY);
 	}
 
   public void resumePlay(Song s) {
@@ -364,7 +340,6 @@ public class WinAmp extends JFrame {
     
   }
 
-  // ensures that only one instance of the WinAmp will ever be created
   public static WinAmp runMusicApp() {
     if(firstInstance == null) {
       firstInstance = new WinAmp();
