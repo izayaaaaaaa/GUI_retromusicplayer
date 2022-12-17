@@ -1,9 +1,19 @@
 // add key events to the control buttons 
 
+// decrease button size
 
+// FIRST SONG HAS TO PLAY BY DEFAULT
+
+
+// song can change
+  // previous/next button
+  // once a song finishes
+
+import javax.sound.sampled.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import javax.swing.*;
 // import javax.swing.border.*;
@@ -12,19 +22,23 @@ import javax.swing.table.*;
 
 public class WinAmp extends JFrame {
   private static WinAmp firstInstance = null;
-
+  
   Song firstSong = new stranger();
   Song secondSong = new stillSane();
   Song thirdSong = new team();
   Song fourthSong = new gottaGetAway();
   Song fifthSong = new adults();
 
+  Song[] arraySongs = {firstSong, secondSong, thirdSong, fourthSong, fifthSong};
+
   JPanel northPanel, mainPanel;
 
   JPanel titlePanel, controlPanel, counterPanel, playGrp;
   JLabel title; 
+  int counter;
   JTextArea currentTrack;
-  String playNpausePath;
+  Song currentSong;
+  String status, playNpausePath;
   JButton previousBtn, nextBtn; 
   JToggleButton playPauseBtn;
 
@@ -33,6 +47,12 @@ public class WinAmp extends JFrame {
   JLabel playlist;
 
   public WinAmp() {
+    // play the first song upon startup
+    counter = 0;
+    currentSong = firstSong;
+    currentSong.getSongClip().loop(Clip.LOOP_CONTINUOUSLY); 
+    play(currentSong);
+    status = "playing";
     // =========================================== NORTH PANEL ===========================================
     northPanel = new JPanel(new BorderLayout());
     // northPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
@@ -66,7 +86,7 @@ public class WinAmp extends JFrame {
     c.gridheight = 2; 
     controlPanel.add(counterPanel, c);
 
-    currentTrack = new JTextArea("Test String", 0, 25);
+    currentTrack = new JTextArea(currentSong.getSong(), 0, 25);
     currentTrack.setBorder(BorderFactory.createLoweredBevelBorder());
     currentTrack.setEditable(false);
     currentTrack.setFont(new Font("Verdana", 0, 16));
@@ -90,18 +110,40 @@ public class WinAmp extends JFrame {
     previousBtn.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         if(e.getSource() == previousBtn) {
-          System.out.println("previous button");
+          stop(currentSong);
+          counter--;
+            
+          if(counter < 0) {
+            counter = arraySongs.length - 1;
+          } 
+
+          currentSong = arraySongs[counter];
+          System.out.println("song " + counter);
+          currentTrack.setText(currentSong.getSong());
+          
+          resumePlay(currentSong);
         }
       }
     });
     
-    playPauseBtn = new JToggleButton(new ImageIcon("src/icons/play2.jpg"));
+    playPauseBtn = new JToggleButton(new ImageIcon("src/icons/pause2.jpg"));
     playPauseBtn.setPreferredSize(new DimensionUIResource(65, 50));
     playPauseBtn.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         if(e.getSource() == playPauseBtn) {
-          System.out.println("play/pause button");
-          playPauseBtn.setSelectedIcon(new ImageIcon("src/icons/pause2.jpg"));
+          if(status.equals("playing")) {
+            pause(currentSong);
+            status = "paused";
+
+            playPauseBtn.setSelectedIcon(new ImageIcon("src/icons/play2.jpg"));
+            System.out.println("music is now paused");
+          } else if (status.equals("paused")) {
+            // put the try catch on the resumePlay method itself
+            resumePlay(currentSong);
+            status = "playing";
+            System.out.println("music is now playing");
+                       
+          } 
         }
       }
     });
@@ -111,7 +153,18 @@ public class WinAmp extends JFrame {
     nextBtn.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         if(e.getSource() == nextBtn) {
-          System.out.println("next button");
+          stop(currentSong);
+          counter++;
+            
+          if(counter >= arraySongs.length) {
+            counter = 0;
+          } 
+
+          currentSong = arraySongs[counter];
+          System.out.println("song " + counter);
+          currentTrack.setText(currentSong.getSong());
+          
+          resumePlay(currentSong);
         }
       }
     });
@@ -171,15 +224,6 @@ public class WinAmp extends JFrame {
     setVisible(true);
   } // WinAmp constructor
 
-  // ensures that only one instance of the WinAmp will ever be created
-  public static WinAmp runMusicApp() {
-    if(firstInstance == null) {
-      firstInstance = new WinAmp();
-    }
-
-    return firstInstance;
-  } // runMusicApp 
-
   class songListTable extends AbstractTableModel {
     String [] columnNames = {"Track No.", "Song", "Duration"};
     Object[][] songs = {
@@ -199,17 +243,49 @@ public class WinAmp extends JFrame {
     public Object getValueAt(int row, int col) {return songs[row][col];}
   }
 
-  // public void play() {
-  //   songClip.start();
-  //   System.out.println("playing");
-  // }
-  // public void pause() {
-  //   if(status.equals("paused")) {
-  //     System.out.println("audio is already paused");
-  //     return;
-  //   } 
+  public void play(Song s) {
+    s.getSongClip().start();
+    status = "playing";
+  }
 
-  // }
+  public void resumePlay(Song s) {
+    try {
+      s.getSongClip().close();
+      resetAudioStream(currentSong);
+      s.getSongClip().setMicrosecondPosition(s.currentFrame);
+      play(currentSong);
+    } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e1) {
+      System.out.println("resumePlay() error");
+      e1.printStackTrace();
+    }
+    
+  }
+  
+  public void pause(Song s) {
+    s.currentFrame = s.getSongClip().getMicrosecondPosition();
+    s.getSongClip().stop();
+    status = "paused";
+  } 
+
+  public void resetAudioStream(Song s) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+		s.setSongStream();
+		s.getSongClip().open(s.getSongStream());
+		s.getSongClip().loop(Clip.LOOP_CONTINUOUSLY);
+	}
+
+  public void stop(Song s) {
+    s.currentFrame = 0L;
+    s.getSongClip().stop();
+  }
+
+  // ensures that only one instance of the WinAmp will ever be created
+  public static WinAmp runMusicApp() {
+    if(firstInstance == null) {
+      firstInstance = new WinAmp();
+    }
+
+    return firstInstance;
+  } // runMusicApp 
 
   public static void main(String[] args) {
     WinAmp.runMusicApp(); 
