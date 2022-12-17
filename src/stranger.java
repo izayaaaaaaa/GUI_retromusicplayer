@@ -1,6 +1,6 @@
 public class stranger extends Song {
   public stranger() {
-    setTrackNo(1);
+    setTrackNo(0);
     setSong("The Stranger - Billy Joel");
     // setSongDuration
 

@@ -1,6 +1,6 @@
 public class gottaGetAway extends Song {
   public gottaGetAway() {
-    setTrackNo(4);
+    setTrackNo(3);
     setSong("Gotta Get Away - Vista Kicks");
     // setSongDuration
 

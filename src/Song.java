@@ -7,27 +7,18 @@ import javax.sound.sampled.*;
 public abstract class Song {
   private int trackNo;
   private String song;
-  // public int songDuration; 
   private String songPath;
   private AudioInputStream songStream;
   private Clip songClip;
 
   String status;
-  Long currentFrame;
-
-  // private String songDuration; 
-  // private String[] strValues;
-  // private Duration durVer = Duration.ofMinutes(Integer.parseInt(strValues[0]));
-  // durVer = durVer.plusSeconds(Integer.parseInt(strValues[1]));
-  // FIX THIS WEIRD SEMICOLON BUG
+  // Public Long songCurrentFrame;
 
   public void setTrackNo(int num) {trackNo = num;}
   public int getTrackNo() {return trackNo;}
 
   public void setSong(String name) {song = name;}
   public String getSong() {return song;}
-
-  // public int getSongDuration() {return songDuration;};
 
   public void setSongPath(String path) {songPath = path;}
   public String getSongPath() {return songPath;}
@@ -41,5 +32,6 @@ public abstract class Song {
     songClip = AudioSystem.getClip();
   }
   public Clip getSongClip() {return songClip;}
-  
+ 
+  // public Long getSongCurrentFrame() {return songCurrentFrame;}
 }

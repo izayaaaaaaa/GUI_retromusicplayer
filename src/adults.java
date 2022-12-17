@@ -1,8 +1,7 @@
 public class adults extends Song {
   public adults() {
-    setTrackNo(5);
+    setTrackNo(4);
     setSong("The Adults are Talking - The Strokes");
-    // setSongDuration
 
     // acquire the audio file
     setSongPath("src/music/The Adults are Talking - The Strokes.wav"); 
